@@ -44,7 +44,7 @@ export default function FeaturedStartups() {
   return (
     <section className="bg-canvas py-section">
       <div className="container-custom">
-        {/* Section header */}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -69,7 +69,6 @@ export default function FeaturedStartups() {
           </Button>
         </motion.div>
 
-        {/* Grid */}
         {loading ? (
           <GridSkeleton count={4}>
             <StartupCardSkeleton />

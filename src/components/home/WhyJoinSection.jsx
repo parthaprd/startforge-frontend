@@ -19,7 +19,6 @@ const iconMap = {
   ShieldCheck,
 };
 
-// Pinterest feature-card and feature-card-soft alternating colors
 const cardColors = [
   'bg-canvas border border-hairline-soft',
   'bg-surface-card border border-hairline-soft',
@@ -40,7 +39,7 @@ export default function WhyJoinSection() {
   return (
     <section className="py-section bg-canvas">
       <div className="container-custom">
-        {/* Section header */}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

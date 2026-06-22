@@ -5,7 +5,6 @@ import { motion, useInView } from 'framer-motion';
 import { PLATFORM_STATS } from '@/constants';
 import { formatNumber } from '@/lib/utils';
 
-// Animated counter that runs when scrolled into view.
 function Counter({ value, suffix = '' }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-50px' });

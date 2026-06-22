@@ -26,7 +26,7 @@ export default function StartupDetailPage() {
         setLoading(true);
         const res = await startupService.getStartupById(id);
         setStartup(res.data);
-        // Some backends nest opportunities under the startup response
+
         setOpportunities(res.data?.opportunities || []);
       } catch (err) {
         setError(getErrorMessage(err, 'Failed to load startup'));
@@ -50,7 +50,7 @@ export default function StartupDetailPage() {
 
   return (
     <div className="bg-surface-soft pb-16">
-      {/* Header banner */}
+
       <div className="border-b border-hairline bg-surface-card py-12">
         <div className="container-custom">
           <Button href="/startups" variant="outline" size="sm" className="mb-6">← All Startups</Button>
@@ -73,14 +73,13 @@ export default function StartupDetailPage() {
       </div>
 
       <div className="container-custom mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
-        {/* Main content */}
+
         <div className="lg:col-span-2 space-y-6">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="card-base p-6">
             <h2 className="text-xl font-semibold text-ink">About {startup.startup_name}</h2>
             <p className="mt-3 whitespace-pre-wrap text-ink-soft">{startup.description}</p>
           </motion.div>
 
-          {/* Opportunities */}
           <div>
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-xl font-semibold text-ink">Open Opportunities</h2>
@@ -98,7 +97,6 @@ export default function StartupDetailPage() {
           </div>
         </div>
 
-        {/* Sidebar */}
         <div className="space-y-6">
           <div className="card-base p-6">
             <h3 className="font-semibold text-ink">Company Info</h3>

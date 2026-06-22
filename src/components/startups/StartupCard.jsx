@@ -31,10 +31,10 @@ export default function StartupCard({ startup }) {
       className="card-base bg-canvas rounded-md border border-hairline-soft overflow-visible"
     >
       <div className="p-4 flex flex-col gap-3 h-full">
-        {/* Top row: logo + company name + industry tag + 3-dot menu */}
+
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-3 min-w-0">
-            {/* Logo */}
+
             <div className="relative h-10 w-10 rounded-md overflow-hidden border border-hairline-soft bg-surface-soft flex-shrink-0">
               <Image
                 src={logo || getPlaceholderImage(startup_name)}
@@ -44,7 +44,7 @@ export default function StartupCard({ startup }) {
                 className="object-cover"
               />
             </div>
-            {/* Name + industry */}
+
             <div className="min-w-0">
               <Link href={`/startups/${_id}`}>
                 <p className="text-[13px] font-bold text-ink leading-tight truncate hover:text-primary transition-colors">
@@ -57,7 +57,6 @@ export default function StartupCard({ startup }) {
             </div>
           </div>
 
-          {/* 3-dot menu */}
           <div className="relative flex-shrink-0">
             <button
               onClick={(e) => { e.preventDefault(); setMenuOpen((v) => !v); }}
@@ -83,7 +82,6 @@ export default function StartupCard({ startup }) {
           </div>
         </div>
 
-        {/* Role / startup name as main heading */}
         <div>
           <Link href={`/startups/${_id}`}>
             <h3 className="text-sm font-bold text-ink leading-snug line-clamp-2 hover:text-primary transition-colors">
@@ -95,10 +93,8 @@ export default function StartupCard({ startup }) {
           )}
         </div>
 
-        {/* Spacer */}
         <div className="flex-1" />
 
-        {/* Bottom row: team size + opportunities count */}
         <div className="flex items-center justify-between pt-2 border-t border-hairline-soft">
           <div>
             <p className="text-[10px] text-ash font-medium">Team Size</p>
@@ -108,7 +104,6 @@ export default function StartupCard({ startup }) {
             </p>
           </div>
 
-          {/* Opportunities count chip - primary button style */}
           <Link
             href={`/startups/${_id}`}
             className="flex items-center gap-1.5 rounded-full bg-primary text-on-primary px-3 py-1.5 text-xs font-bold hover:bg-primary-pressed transition-colors"

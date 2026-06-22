@@ -20,7 +20,7 @@ export default function SuccessStories() {
   return (
     <section className="py-section bg-surface-soft">
       <div className="container-custom">
-        {/* Section header */}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -39,7 +39,6 @@ export default function SuccessStories() {
           </p>
         </motion.div>
 
-        {/* Testimonial card */}
         <div className="relative mx-auto mt-10 max-w-3xl">
           <AnimatePresence mode="wait">
             <motion.div
@@ -50,22 +49,19 @@ export default function SuccessStories() {
               transition={{ duration: 0.35 }}
               className="rounded-lg border border-hairline-soft bg-canvas p-8 md:p-10 text-center shadow-none"
             >
-              {/* Quote icon */}
+
               <Quote className="mx-auto h-9 w-9 text-primary-100" />
 
-              {/* Quote text */}
               <p className="mt-5 text-lg leading-relaxed text-ink-soft md:text-xl">
                 &ldquo;{story.quote}&rdquo;
               </p>
 
-              {/* Stars */}
               <div className="mt-7 flex items-center justify-center gap-1">
                 {Array.from({ length: story.rating }).map((_, i) => (
                   <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
 
-              {/* Avatar + name */}
               <div className="mt-5 flex flex-col items-center gap-3">
                 <div className="relative h-14 w-14 overflow-hidden rounded-full border-2 border-hairline-soft">
                   <Image
@@ -84,7 +80,6 @@ export default function SuccessStories() {
             </motion.div>
           </AnimatePresence>
 
-          {/* Navigation arrows */}
           <button
             onClick={prev}
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 rounded-full border border-hairline-soft bg-canvas p-2.5 shadow-none transition text-ink hover:border-primary hover:text-primary hidden md:flex"
@@ -101,7 +96,6 @@ export default function SuccessStories() {
           </button>
         </div>
 
-        {/* Dot indicators */}
         <div className="mt-8 flex justify-center gap-2">
           {SUCCESS_STORIES.map((_, idx) => (
             <button

@@ -1,4 +1,4 @@
-// Application constants
+
 
 export const APP_NAME = 'StartupForge';
 export const APP_TAGLINE = 'Build Your Dream Startup Team';
@@ -46,10 +46,8 @@ export const APPLICATION_STATUSES = ['pending', 'accepted', 'rejected'];
 
 export const STARTUP_STATUSES = ['pending', 'approved', 'rejected'];
 
-// Free tier limits
 export const FREE_OPPORTUNITY_LIMIT = 3;
 
-// Premium plan
 export const PREMIUM_PLAN = {
   name: 'Premium Founder',
   price: 100000001,
@@ -64,7 +62,6 @@ export const PREMIUM_PLAN = {
   ],
 };
 
-// Statistic counters for the home page
 export const PLATFORM_STATS = [
   { label: 'Active Founders', value: 12500, suffix: '+' },
   { label: 'Startups Listed', value: 3400, suffix: '+' },
@@ -72,7 +69,6 @@ export const PLATFORM_STATS = [
   { label: 'Successful Hires', value: 5600, suffix: '+' },
 ];
 
-// How it works steps
 export const HOW_IT_WORKS_STEPS = [
   {
     step: 1,
@@ -97,7 +93,6 @@ export const HOW_IT_WORKS_STEPS = [
   },
 ];
 
-// Platform benefits
 export const PLATFORM_BENEFITS = [
   {
     title: 'For Founders',
@@ -129,7 +124,6 @@ export const PLATFORM_BENEFITS = [
   },
 ];
 
-// Success stories / testimonials
 export const SUCCESS_STORIES = [
   {
     name: 'Sarah Chen',

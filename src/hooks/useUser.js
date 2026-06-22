@@ -3,10 +3,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/context/AuthContext';
 
-/**
- * Hook that exposes the current authenticated user and helpers
- * built on top of the AuthContext.
- */
 export function useUser() {
   const { user, loading, updateUser, refreshUser, logout } = useAuth();
 

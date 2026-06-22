@@ -46,7 +46,7 @@ export default function FeaturedOpportunities() {
   return (
     <section className="py-section bg-surface-soft">
       <div className="container-custom">
-        {/* Section header */}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -76,7 +76,6 @@ export default function FeaturedOpportunities() {
           </Button>
         </motion.div>
 
-        {/* Grid */}
         {loading ? (
           <GridSkeleton count={4}>
             <OpportunityCardSkeleton />

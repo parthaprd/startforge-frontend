@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Pin Sans font face — proprietary; system-ui fallback for production */
 @font-face {
   font-family: 'Pin Sans';
   src: local('Pin Sans');
@@ -24,7 +23,6 @@
   ::-webkit-scrollbar-thumb { @apply bg-stone rounded-full; }
   ::-webkit-scrollbar-thumb:hover { @apply bg-mute; }
 
-  /* Pinterest focus ring */
   *:focus-visible {
     outline: 3px solid var(--tw-colors-focus-outer, #435ee5);
     outline-offset: 2px;
@@ -36,7 +34,6 @@
     @apply mx-auto w-full max-w-[1280px] px-4 sm:px-6 lg:px-8;
   }
 
-  /* Typography utilities mapped to Pin Sans tokens */
   .text-display-xl {
     font-size: 70px;
     font-weight: 600;

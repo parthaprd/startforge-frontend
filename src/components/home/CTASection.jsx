@@ -15,24 +15,21 @@ export default function CTASection() {
           transition={{ duration: 0.5 }}
           className="mx-auto max-w-3xl text-center"
         >
-          {/* Free badge */}
+
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-on-dark-mute/20 bg-on-dark-mute/10 px-4 py-1.5 text-sm font-medium text-on-dark-mute">
             <Sparkles className="h-4 w-4" />
             Free to get started
           </div>
 
-          {/* Display headline */}
           <h2 className="text-heading-xl font-bold text-on-dark md:text-4xl md:tracking-[-1.5px]">
             Ready to build something amazing?
           </h2>
 
-          {/* Body */}
           <p className="mx-auto mt-4 max-w-xl text-body-lg text-on-dark-mute">
             Join thousands of founders and collaborators already building the
             future on StartupForge.
           </p>
 
-          {/* CTAs */}
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button
               href="/register"

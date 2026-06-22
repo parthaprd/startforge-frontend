@@ -42,7 +42,7 @@ export default function BrowseOpportunities() {
   }, [router, searchParams]);
 
   useEffect(() => { updateUrl({ search: debouncedSearch, page: '' }); }, [debouncedSearch, updateUrl]);
-  useEffect(() => { updateUrl({ work_type: filters.work_type, commitment_level: filters.commitment_level, industry: filters.industry, page: '' }); /* eslint-disable-next-line */ }, [filters]);
+  useEffect(() => { updateUrl({ work_type: filters.work_type, commitment_level: filters.commitment_level, industry: filters.industry, page: '' });   }, [filters]);
 
   useEffect(() => {
     const fetchData = async () => {

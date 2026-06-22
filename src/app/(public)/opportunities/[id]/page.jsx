@@ -67,7 +67,7 @@ export default function OpportunityDetailPage() {
 
   return (
     <div className="bg-surface-soft pb-16">
-      {/* Header */}
+
       <div className="border-b border-hairline bg-surface-card py-12">
         <div className="container-custom">
           <Button href="/opportunities" variant="outline" size="sm" className="mb-6">← All Opportunities</Button>
@@ -90,7 +90,7 @@ export default function OpportunityDetailPage() {
       </div>
 
       <div className="container-custom mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
-        {/* Main */}
+
         <div className="space-y-6 lg:col-span-2">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="card-base p-6">
             <h2 className="text-xl font-semibold text-ink">Role Description</h2>
@@ -122,9 +122,8 @@ export default function OpportunityDetailPage() {
           )}
         </div>
 
-        {/* Sidebar */}
         <div className="space-y-6">
-          {/* Apply card */}
+
           <div className="card-base sticky top-24 p-6">
             {canApply ? (
               <>
@@ -148,7 +147,6 @@ export default function OpportunityDetailPage() {
             ) : null}
           </div>
 
-          {/* Startup info */}
           <div className="card-base p-6">
             <h3 className="font-semibold text-ink">About the Startup</h3>
             <div className="mt-4 flex items-center gap-3">

@@ -8,13 +8,6 @@ import { FullPageSpinner } from '@/components/ui/Spinner';
 import { ShieldAlert } from 'lucide-react';
 import Button from '@/components/ui/Button';
 
-/**
- * Wraps protected page content. Redirects unauthenticated users to /login,
- * and unauthorized roles to their own dashboard.
- *
- * @param {ReactNode} children - Page content
- * @param {string[]} allowedRoles - e.g. ['founder']; empty = any authenticated user
- */
 export default function ProtectedRoute({ children, allowedRoles = [] }) {
   const { user, loading } = useAuth();
   const router = useRouter();

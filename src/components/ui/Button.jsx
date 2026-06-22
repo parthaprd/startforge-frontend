@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 const variants = {
   primary:
     'bg-primary text-on-primary hover:bg-primary-pressed active:bg-primary-pressed',
-  // gradient is a Pinterest-system alias for primary — no decorative gradients in this system
+
   gradient:
     'bg-primary text-on-primary hover:bg-primary-pressed active:bg-primary-pressed',
   secondary:

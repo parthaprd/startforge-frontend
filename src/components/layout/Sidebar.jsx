@@ -57,7 +57,7 @@ export default function Sidebar({ mobileOpen, onCloseMobile }) {
 
   const sidebarContent = (
     <div className="flex h-full flex-col bg-canvas">
-      {/* Top spacer */}
+
       <div className="flex h-16 items-center justify-between border-b border-hairline px-5">
         <button
           onClick={onCloseMobile}
@@ -68,7 +68,6 @@ export default function Sidebar({ mobileOpen, onCloseMobile }) {
         </button>
       </div>
 
-      {/* User profile section */}
       <div className="border-b border-hairline p-5">
         {loading ? (
           <div className="flex items-center gap-3">
@@ -102,7 +101,6 @@ export default function Sidebar({ mobileOpen, onCloseMobile }) {
         )}
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 space-y-0.5 overflow-y-auto p-3">
         <p className="px-3 pb-2 pt-2 text-[10px] font-bold uppercase tracking-widest text-ash">
           Menu
@@ -162,7 +160,6 @@ export default function Sidebar({ mobileOpen, onCloseMobile }) {
         </Link>
       </nav>
 
-      {/* Logout */}
       <div className="border-t border-hairline p-3">
         <button
           onClick={handleLogout}
@@ -177,12 +174,11 @@ export default function Sidebar({ mobileOpen, onCloseMobile }) {
 
   return (
     <>
-      {/* Desktop sidebar (fixed) */}
+
       <aside className="hidden w-64 flex-shrink-0 border-r border-hairline bg-canvas lg:block">
         <div className="sticky top-0 h-screen">{sidebarContent}</div>
       </aside>
 
-      {/* Mobile sidebar (drawer) */}
       <AnimatePresence>
         {mobileOpen && (
           <div className="fixed inset-0 z-[60] lg:hidden">

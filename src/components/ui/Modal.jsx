@@ -24,7 +24,7 @@ export default function Modal({
   closeOnBackdrop = true,
   showClose = true,
 }) {
-  // Prevent body scroll when modal is open
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -36,7 +36,6 @@ export default function Modal({
     };
   }, [isOpen]);
 
-  // Close on Escape key
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === 'Escape') onClose?.();
@@ -53,7 +52,7 @@ export default function Modal({
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          {/* Backdrop */}
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -64,7 +63,6 @@ export default function Modal({
             aria-hidden="true"
           />
 
-          {/* Modal panel */}
           <motion.div
             role="dialog"
             aria-modal="true"
@@ -79,7 +77,7 @@ export default function Modal({
               className
             )}
           >
-            {/* Header */}
+
             {(title || showClose) && (
               <div className="flex items-start justify-between gap-4 border-b border-hairline px-8 pt-8 pb-4">
                 <div>
@@ -107,7 +105,6 @@ export default function Modal({
               </div>
             )}
 
-            {/* Body */}
             <div className="max-h-[70vh] overflow-y-auto px-8 pb-8 pt-6">{children}</div>
           </motion.div>
         </div>

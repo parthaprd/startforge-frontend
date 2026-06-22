@@ -25,7 +25,7 @@ export function Skeleton({ variant = 'rectangle', className, width, height }) {
 export function StartupCardSkeleton() {
   return (
     <div className="card-base bg-canvas p-4 flex flex-col gap-3">
-      {/* Top row */}
+
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-3 flex-1">
           <Skeleton variant="rectangle" width={40} height={40} className="rounded-md" />
@@ -36,12 +36,12 @@ export function StartupCardSkeleton() {
         </div>
         <Skeleton variant="circle" width={28} height={28} />
       </div>
-      {/* Title */}
+
       <div className="space-y-1.5">
         <Skeleton variant="text" width="75%" />
         <Skeleton variant="text" width="40%" height={10} />
       </div>
-      {/* Bottom row */}
+
       <div className="flex items-center justify-between pt-2 border-t border-hairline-soft">
         <Skeleton width={60} height={28} />
         <Skeleton width={90} height={28} className="rounded-full" />
@@ -53,7 +53,7 @@ export function StartupCardSkeleton() {
 export function OpportunityCardSkeleton() {
   return (
     <div className="card-base bg-canvas p-4 flex flex-col gap-3">
-      {/* Top row */}
+
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-3 flex-1">
           <Skeleton variant="rectangle" width={40} height={40} className="rounded-md" />
@@ -64,18 +64,18 @@ export function OpportunityCardSkeleton() {
         </div>
         <Skeleton variant="circle" width={28} height={28} />
       </div>
-      {/* Title */}
+
       <div className="space-y-1.5">
         <Skeleton variant="text" width="80%" />
         <Skeleton variant="text" width="35%" height={10} />
       </div>
-      {/* Skills */}
+
       <div className="flex gap-1.5">
         <Skeleton width={55} height={20} className="rounded-full" />
         <Skeleton width={65} height={20} className="rounded-full" />
         <Skeleton width={48} height={20} className="rounded-full" />
       </div>
-      {/* Bottom row */}
+
       <div className="flex items-center justify-between pt-2 border-t border-hairline-soft">
         <Skeleton width={70} height={28} />
         <Skeleton width={80} height={28} className="rounded-full" />
@@ -83,8 +83,6 @@ export function OpportunityCardSkeleton() {
     </div>
   );
 }
-
-
 
 export function GridSkeleton({ count = 6, children }) {
   return (

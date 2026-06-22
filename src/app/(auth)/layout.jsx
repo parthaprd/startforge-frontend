@@ -13,7 +13,7 @@ const SIDE_STATS = [
 export default function AuthLayout({ children }) {
   return (
     <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
-      {/* Form side — warm cream */}
+
       <div className="flex flex-col justify-center bg-canvas px-6 py-12 sm:px-10 lg:px-16">
         <div className="mx-auto w-full max-w-md">
           <div className="mb-10">
@@ -22,12 +22,9 @@ export default function AuthLayout({ children }) {
         </div>
       </div>
 
-      {/* Brand side — ink */}
       <div className="relative hidden overflow-hidden bg-ink lg:block">
         <div className="relative flex h-full flex-col justify-center p-14">
-          {/* Heading */}
 
-          {/* Heading */}
           <h2 className="text-4xl font-bold leading-tight text-on-dark md:text-5xl md:tracking-[-1.5px]">
             Join thousands of<br />
             <span className="text-primary">builders</span> shaping<br />
@@ -38,7 +35,6 @@ export default function AuthLayout({ children }) {
             seeking your next adventure — StartupForge connects you.
           </p>
 
-          {/* Stats grid */}
           <div className="mt-10 grid grid-cols-2 gap-4">
             {SIDE_STATS.map((stat) => (
               <div

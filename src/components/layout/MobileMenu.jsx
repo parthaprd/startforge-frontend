@@ -21,7 +21,7 @@ export default function MobileMenu({ open, onClose, user, onLogout }) {
     <AnimatePresence>
       {open && (
         <div className="fixed inset-0 z-[60] md:hidden">
-          {/* Backdrop */}
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -30,7 +30,6 @@ export default function MobileMenu({ open, onClose, user, onLogout }) {
             onClick={onClose}
           />
 
-          {/* Drawer */}
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
@@ -49,7 +48,6 @@ export default function MobileMenu({ open, onClose, user, onLogout }) {
               </button>
             </div>
 
-            {/* User section */}
             {user ? (
               <div className="border-b border-hairline p-4">
                 <div className="flex items-center gap-3">
@@ -69,7 +67,6 @@ export default function MobileMenu({ open, onClose, user, onLogout }) {
               </div>
             ) : null}
 
-            {/* Nav links */}
             <nav className="p-2">
               {navLinks.map((link) => (
                 <Link
@@ -83,7 +80,6 @@ export default function MobileMenu({ open, onClose, user, onLogout }) {
               ))}
             </nav>
 
-            {/* Actions */}
             <div className="border-t border-hairline p-4">
               {user ? (
                 <div className="space-y-1">

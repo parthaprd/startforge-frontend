@@ -4,8 +4,6 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
-// Pinterest system: icon containers use surface-card bg with tinted icon text
-// Only Pinterest Red is used as a highly saturated color — other accents are muted
 const colorMap = {
   primary:   { iconBg: 'bg-[#ffe5e0]', iconText: 'text-primary' },
   secondary: { iconBg: 'bg-secondary-bg', iconText: 'text-mute' },

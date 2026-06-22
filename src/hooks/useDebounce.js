@@ -2,10 +2,6 @@
 
 import { useEffect, useState } from 'react';
 
-/**
- * Hook that returns a debounced value after the specified delay.
- * Useful for search inputs.
- */
 export function useDebounce(value, delay = 500) {
   const [debouncedValue, setDebouncedValue] = useState(value);
 

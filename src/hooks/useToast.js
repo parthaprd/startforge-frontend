@@ -2,9 +2,6 @@
 
 import toast from 'react-hot-toast';
 
-/**
- * Hook that exposes convenient toast notification helpers.
- */
 export function useToast() {
   return {
     success: (message) => toast.success(message),

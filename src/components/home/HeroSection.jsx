@@ -10,7 +10,7 @@ export default function HeroSection() {
     <section className="relative overflow-hidden bg-surface-soft border-b border-hairline-soft">
       <div className="container-custom relative py-20 md:py-28 lg:py-32">
         <div className="mx-auto max-w-4xl text-center">
-          {/* Badge */}
+
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -21,7 +21,6 @@ export default function HeroSection() {
             Join 12,000+ founders & collaborators
           </motion.div>
 
-          {/* Headline */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -34,7 +33,6 @@ export default function HeroSection() {
             </span>
           </motion.h1>
 
-          {/* Subheadline */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -46,7 +44,6 @@ export default function HeroSection() {
             startup opportunities.
           </motion.p>
 
-          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -73,7 +70,6 @@ export default function HeroSection() {
             </Button>
           </motion.div>
 
-          {/* Quick feature pills */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

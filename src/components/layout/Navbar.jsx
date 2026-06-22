@@ -59,7 +59,7 @@ export default function Navbar() {
       pathname === '/' ? "border-b border-transparent" : "border-b border-hairline"
     )}>
       <nav className="container-custom flex h-16 items-center justify-between gap-4">
-        {/* Left: Logo + desktop nav */}
+
         <div className="flex items-center gap-4">
           <Logo />
           <div className="hidden items-center gap-1.5 md:flex font-semibold text-sm">
@@ -86,7 +86,6 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Center: Centered Search Bar */}
         <form onSubmit={handleNavSearchSubmit} className="hidden flex-1 max-w-lg mx-4 md:block relative">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
             <Search className="h-4 w-4 text-mute" />
@@ -100,7 +99,6 @@ export default function Navbar() {
           />
         </form>
 
-        {/* Right: Auth actions */}
         <div className="flex items-center gap-3">
           {loading ? (
             <div className="hidden items-center gap-2 md:flex">
@@ -186,7 +184,6 @@ export default function Navbar() {
             </div>
           )}
 
-          {/* Mobile menu toggle */}
           <button
             onClick={() => setMobileOpen(true)}
             className="rounded-lg p-2 text-ink hover:bg-surface-card md:hidden"

@@ -63,13 +63,12 @@ function StartupsContent() {
   };
   const handlePageChange = (page) => updateParams({ page });
 
-  // Split startups into "featured" (first 3) and "all"
   const featuredStartups = startups.slice(0, 3);
   const allStartups = startups.slice(3);
 
   return (
     <div className="min-h-screen bg-surface-soft">
-      {/* Page header */}
+
       <div className="bg-ink py-14">
         <div className="container-custom text-center">
           <span className="text-sm font-semibold uppercase tracking-wider text-on-dark-mute block mb-2">
@@ -85,7 +84,7 @@ function StartupsContent() {
       </div>
 
       <div className="container-custom py-10 pb-16">
-        {/* Filter bar */}
+
         <div className="rounded-md border border-hairline-soft bg-canvas p-4 mb-10">
           <form
             onSubmit={handleSearch}
@@ -122,10 +121,9 @@ function StartupsContent() {
           </form>
         </div>
 
-        {/* Results */}
         {loading ? (
           <>
-            {/* Featured skeleton section */}
+
             <div className="mb-10">
               <div className="flex items-center justify-between mb-5">
                 <div className="h-6 w-36 shimmer-bg rounded-md" />
@@ -163,7 +161,7 @@ function StartupsContent() {
           </div>
         ) : (
           <>
-            {/* Featured / Top Startups Section */}
+
             {featuredStartups.length > 0 && (
               <section className="mb-10">
                 <div className="flex items-center justify-between mb-5">
@@ -193,7 +191,6 @@ function StartupsContent() {
               </section>
             )}
 
-            {/* All Startups Section */}
             {allStartups.length > 0 && (
               <section>
                 <div className="flex items-center justify-between mb-5">
@@ -226,7 +223,6 @@ function StartupsContent() {
               </section>
             )}
 
-            {/* Pagination */}
             <div className="mt-10">
               <Pagination
                 currentPage={pagination.current}

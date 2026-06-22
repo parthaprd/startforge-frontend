@@ -50,19 +50,16 @@ export default function RegisterPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file type
     if (!file.type.startsWith('image/')) {
       toast.error('Please select an image file');
       return;
     }
 
-    // Validate file size (max 5MB for imgbb free)
     if (file.size > 5 * 1024 * 1024) {
       toast.error('Image must be under 5MB');
       return;
     }
 
-    // Show preview immediately
     const reader = new FileReader();
     reader.onload = (ev) => setImagePreview(ev.target.result);
     reader.readAsDataURL(file);
@@ -152,11 +149,10 @@ export default function RegisterPage() {
 
         <Input label="Confirm Password" type="password" placeholder="••••••••" leftIcon={Lock} error={errors.confirmPassword?.message} {...register('confirmPassword')} />
 
-        {/* Image Upload Box */}
         <div>
           <label className="mb-2 block text-sm font-medium text-ink-soft dark:text-gray-300">Profile Image</label>
           <div className="rounded-xl border border-hairline dark:border-gray-700 bg-canvas dark:bg-gray-800 p-4">
-            {/* Preview area */}
+
             {imagePreview ? (
               <div className="relative mx-auto mb-3 h-24 w-24 rounded-full overflow-hidden border-2 border-hairline dark:border-gray-600">
                 <Image
@@ -180,7 +176,6 @@ export default function RegisterPage() {
               </div>
             )}
 
-            {/* Tab-style toggle */}
             <div className="flex rounded-lg border border-hairline dark:border-gray-600 overflow-hidden mb-3">
               <button
                 type="button"
@@ -210,7 +205,6 @@ export default function RegisterPage() {
               </button>
             </div>
 
-            {/* Hidden file input */}
             <input
               ref={fileInputRef}
               type="file"
@@ -219,7 +213,6 @@ export default function RegisterPage() {
               className="hidden"
             />
 
-            {/* Image URL input */}
             <input
               type="url"
               placeholder="Paste image URL here..."
@@ -233,7 +226,6 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        {/* Role Selector - Red radio buttons */}
         <div>
           <label className="mb-2 block text-sm font-medium text-ink-soft dark:text-gray-300">I want to join as <span className="text-primary">*</span></label>
           <div className="grid grid-cols-2 gap-3">

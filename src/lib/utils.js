@@ -1,15 +1,9 @@
 import { clsx } from 'clsx';
 
-/**
- * Combine class names conditionally
- */
 export function cn(...args) {
   return clsx(...args);
 }
 
-/**
- * Format a date string into a readable format
- */
 export function formatDate(date, options = {}) {
   if (!date) return 'N/A';
   const d = new Date(date);
@@ -25,9 +19,6 @@ export function formatDate(date, options = {}) {
   return d.toLocaleDateString('en-US', defaultOptions);
 }
 
-/**
- * Format a date with time
- */
 export function formatDateTime(date) {
   return formatDate(date, {
     year: 'numeric',
@@ -38,9 +29,6 @@ export function formatDateTime(date) {
   });
 }
 
-/**
- * Get a relative time string like "2 days ago"
- */
 export function timeAgo(date) {
   if (!date) return '';
   const d = new Date(date);
@@ -63,9 +51,6 @@ export function timeAgo(date) {
   return 'Just now';
 }
 
-/**
- * Calculate days remaining until a deadline date
- */
 export function daysUntil(date) {
   if (!date) return 0;
   const target = new Date(date);
@@ -74,9 +59,6 @@ export function daysUntil(date) {
   return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
 }
 
-/**
- * Get a human-readable deadline countdown
- */
 export function deadlineCountdown(date) {
   const days = daysUntil(date);
   if (days <= 0) return 'Closed';
@@ -86,25 +68,16 @@ export function deadlineCountdown(date) {
   return formatDate(date);
 }
 
-/**
- * Truncate text to a max length with ellipsis
- */
 export function truncate(text, length = 100) {
   if (!text) return '';
   return text.length > length ? text.substring(0, length).trim() + '…' : text;
 }
 
-/**
- * Format a number with commas (e.g. 12500 -> 12,500)
- */
 export function formatNumber(num) {
   if (num === null || num === undefined) return '0';
   return num.toLocaleString('en-US');
 }
 
-/**
- * Format a currency value
- */
 export function formatCurrency(amount, currency = 'USD') {
   if (amount === null || amount === undefined) return '$0';
   return new Intl.NumberFormat('en-US', {
@@ -114,9 +87,6 @@ export function formatCurrency(amount, currency = 'USD') {
   }).format(amount);
 }
 
-/**
- * Get initials from a name
- */
 export function getInitials(name = '') {
   return name
     .split(' ')
@@ -126,24 +96,15 @@ export function getInitials(name = '') {
     .toUpperCase();
 }
 
-/**
- * Capitalize the first letter of a string
- */
 export function capitalize(str = '') {
   if (!str) return '';
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-/**
- * Validate an email address
- */
 export function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-/**
- * Validate a URL
- */
 export function isValidUrl(url) {
   try {
     new URL(url);
@@ -153,16 +114,10 @@ export function isValidUrl(url) {
   }
 }
 
-/**
- * Sleep for ms milliseconds (useful for debounce)
- */
 export function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-/**
- * Debounce a function
- */
 export function debounce(fn, delay = 500) {
   let timeoutId;
   return (...args) => {
@@ -171,18 +126,12 @@ export function debounce(fn, delay = 500) {
   };
 }
 
-/**
- * Get a placeholder image URL based on seed
- */
 export function getPlaceholderImage(seed = 'startup') {
   return `https://ui-avatars.com/api/?name=${encodeURIComponent(
     seed
   )}&background=2563eb&color=fff&size=256`;
 }
 
-/**
- * Build a query string from an object of params
- */
 export function buildQueryParams(params = {}) {
   const searchParams = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
@@ -193,9 +142,6 @@ export function buildQueryParams(params = {}) {
   return searchParams.toString();
 }
 
-/**
- * Get an error message from a thrown error
- */
 export function getErrorMessage(error, fallback = 'Something went wrong') {
   if (!error) return fallback;
   if (typeof error === 'string') return error;

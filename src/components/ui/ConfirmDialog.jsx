@@ -5,8 +5,6 @@ import { AlertTriangle } from 'lucide-react';
 import Modal from './Modal';
 import Button from './Button';
 
-// Reusable confirmation dialog for destructive actions.
-// Usage: <ConfirmDialog open={open} onConfirm={handleDelete} onClose={...} title="..." />
 export default function ConfirmDialog({
   open,
   onClose,
@@ -26,7 +24,7 @@ export default function ConfirmDialog({
       await onConfirm?.();
       onClose?.();
     } catch (error) {
-      // Error handling done by parent via toast
+
     } finally {
       setSubmitting(false);
     }

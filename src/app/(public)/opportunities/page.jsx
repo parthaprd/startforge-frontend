@@ -32,7 +32,6 @@ function OpportunitiesContent() {
 
   const debouncedSearch = useDebounce(search, 500);
 
-  // Use a ref-based pushUrl so effects never become stale
   const routerRef = useRef(router);
   useEffect(() => { routerRef.current = router; }, [router]);
 
@@ -46,7 +45,6 @@ function OpportunitiesContent() {
     routerRef.current.push(`/opportunities?${params.toString()}`);
   }, []);
 
-  // Track previous values to avoid resetting page on unrelated searchParams changes
   const prevSearchRef = useRef(debouncedSearch);
   useEffect(() => {
     if (debouncedSearch !== prevSearchRef.current) {
@@ -61,7 +59,7 @@ function OpportunitiesContent() {
       prevFiltersRef.current = filters;
       updateUrl({ work_type: filters.work_type, commitment_level: filters.commitment_level, industry: filters.industry, page: '' });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [filters]);
 
   useEffect(() => {
@@ -112,20 +110,18 @@ function OpportunitiesContent() {
 
       <div className="container-custom -mt-8 pb-16">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr]">
-          {/* Desktop sidebar */}
+
           <aside className="hidden lg:block">
             <div className="sticky top-24">
               <OpportunityFilters filters={filters} onChange={setFilters} onClear={clearFilters} search={search} onSearchChange={setSearch} />
             </div>
           </aside>
 
-          {/* Mobile filter toggle */}
           <div className="flex items-center justify-between lg:hidden">
             <p className="text-sm text-mute">{pagination.count || 0} opportunities</p>
             <Button variant="outline" size="sm" leftIcon={SlidersHorizontal} onClick={() => setShowMobileFilters(true)}>Filters</Button>
           </div>
 
-          {/* Results */}
           <div>
             {loading ? (
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -157,7 +153,6 @@ function OpportunitiesContent() {
         </div>
       </div>
 
-      {/* Mobile filter drawer */}
       {showMobileFilters && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-charcoal/50 backdrop-blur-sm" onClick={() => setShowMobileFilters(false)} />

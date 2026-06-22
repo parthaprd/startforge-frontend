@@ -31,7 +31,7 @@ export default function Footer() {
     <footer className="border-t border-hairline bg-canvas rounded-none">
       <div className="container-custom py-8 px-6 md:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {/* Brand column */}
+
           <div className="lg:col-span-1">
             <Logo />
             <p className="mt-4 max-w-xs text-body-sm text-mute">
@@ -52,7 +52,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick links */}
           <div>
             <h3 className="text-body-sm-strong text-ink uppercase tracking-wider">
               Quick Links
@@ -71,7 +70,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Resources */}
           <div>
             <h3 className="text-body-sm-strong text-ink uppercase tracking-wider">
               Resources
@@ -90,7 +88,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Newsletter / CTA */}
           <div>
             <h3 className="text-body-sm-strong text-ink uppercase tracking-wider">
               Get Started

@@ -1,4 +1,4 @@
-// Authentication helper utilities
+
 
 export const TOKEN_KEY = 'token';
 

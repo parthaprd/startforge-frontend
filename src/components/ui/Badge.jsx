@@ -14,7 +14,6 @@ const variants = {
   outline: 'border border-hairline text-mute bg-canvas',
 };
 
-// Map status values from API to badge variants
 const statusVariants = {
   pending: 'warning',
   approved: 'success',
@@ -33,7 +32,7 @@ export default function Badge({
   className,
   dot = false,
 }) {
-  // Allow passing a status string (e.g. "pending") as variant
+
   const resolvedVariant = statusVariants[variant] || variant;
 
   const sizes = {

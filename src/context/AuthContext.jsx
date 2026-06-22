@@ -6,18 +6,11 @@ import { getToken, setToken, removeToken } from '@/lib/auth';
 
 const AuthContext = createContext(null);
 
-/**
- * The axios response interceptor (src/lib/api.js) already unwraps one layer
- * (it returns `response.data`). Different endpoints return the user at
- * different nesting levels, so this helper normalises all known shapes:
- *   { user }            | { data: { user } } | { data: { data: { user } } }
- * into a single user object (or null).
- */
 function extractUser(response) {
   if (!response) return null;
-  // After interceptor unwrap, `response` is the JSON body itself.
+
   const body = response.data && typeof response.data === 'object' ? response.data : response;
-  // Check the common nesting shapes, deepest first.
+
   return (
     body?.data?.user ||
     body?.data?.data?.user ||
@@ -45,8 +38,7 @@ export function AuthProvider({ children }) {
       if (userData) {
         setUser(userData);
       } else {
-        // No usable user object — treat as unauthenticated so callers redirect
-        // to /login rather than falling through to the home route.
+
         setUser(null);
         removeToken();
       }
@@ -76,7 +68,7 @@ export function AuthProvider({ children }) {
     try {
       await authService.logout();
     } catch (error) {
-      // Even if the API call fails, clear local state
+
     } finally {
       setUser(null);
       removeToken();

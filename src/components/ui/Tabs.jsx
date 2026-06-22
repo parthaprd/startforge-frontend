@@ -2,7 +2,6 @@
 
 import { cn } from '@/lib/utils';
 
-// Link-like component used for tabs and segmented navigation
 export default function Tabs({ tabs, active, onChange, className, size = 'md' }) {
   const sizes = {
     sm: 'text-xs px-3 py-1.5',

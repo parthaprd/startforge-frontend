@@ -36,10 +36,9 @@ export default function OpportunityCard({ opportunity }) {
     >
       <div className="p-4 flex flex-col gap-3 h-full">
 
-        {/* Top row: startup logo + name + work_type tag + 3-dot menu */}
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-3 min-w-0">
-            {/* Startup logo */}
+
             <div className="relative h-10 w-10 rounded-md overflow-hidden border border-hairline-soft bg-surface-soft flex-shrink-0">
               <Image
                 src={startupLogo || getPlaceholderImage(startupName)}
@@ -49,7 +48,7 @@ export default function OpportunityCard({ opportunity }) {
                 className="object-cover"
               />
             </div>
-            {/* Startup name + work type */}
+
             <div className="min-w-0">
               <p className="text-[13px] font-bold text-ink leading-tight truncate">
                 {startupName}
@@ -60,7 +59,6 @@ export default function OpportunityCard({ opportunity }) {
             </div>
           </div>
 
-          {/* 3-dot menu */}
           <div className="relative flex-shrink-0">
             <button
               onClick={(e) => { e.preventDefault(); setMenuOpen((v) => !v); }}
@@ -86,7 +84,6 @@ export default function OpportunityCard({ opportunity }) {
           </div>
         </div>
 
-        {/* Role title (main heading) */}
         <div>
           <Link href={`/opportunities/${_id}`}>
             <h3 className="text-sm font-bold text-ink leading-snug line-clamp-2 hover:text-primary transition-colors">
@@ -98,7 +95,6 @@ export default function OpportunityCard({ opportunity }) {
           )}
         </div>
 
-        {/* Skills pills */}
         {visibleSkills.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             {visibleSkills.map((skill, idx) => (
@@ -117,10 +113,8 @@ export default function OpportunityCard({ opportunity }) {
           </div>
         )}
 
-        {/* Spacer */}
         <div className="flex-1" />
 
-        {/* Bottom row: deadline chip (left) + commitment level (right) */}
         <div className="flex items-center justify-between pt-2 border-t border-hairline-soft">
           <div>
             <p className="text-[10px] text-ash font-medium">Deadline</p>
@@ -130,7 +124,6 @@ export default function OpportunityCard({ opportunity }) {
             </p>
           </div>
 
-          {/* Apply chip */}
           <Link
             href={`/opportunities/${_id}`}
             className="flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-bold hover:bg-primary/20 transition-colors"
