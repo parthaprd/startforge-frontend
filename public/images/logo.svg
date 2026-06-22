@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" fill="none">
+  <defs>
+    <linearGradient id="logoG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#9333ea"/>
+    </linearGradient>
+  </defs>
+  <rect width="36" height="36" rx="8" fill="url(#logoG)"/>
+  <path d="M18 8L8 18l10 10 10-10-10-10z" fill="white" opacity="0.9"/>
+  <text x="44" y="27" font-family="system-ui, sans-serif" font-size="20" font-weight="bold" fill="#111827">Startup</text>
+  <text x="154" y="27" font-family="system-ui, sans-serif" font-size="20" font-weight="bold" fill="url(#logoG)">Forge</text>
+</svg>
