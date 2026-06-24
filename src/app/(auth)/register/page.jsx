@@ -17,7 +17,7 @@ import {
   X,
   Loader2,
 } from "lucide-react";
-import { signUp } from "@/lib/auth-client";
+import { authService } from "@/services/authService";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { cn, getErrorMessage } from "@/lib/utils";
@@ -133,8 +133,7 @@ export default function RegisterPage() {
 
     setSubmitting(true);
     try {
-      // First, register with better-auth (for frontend session)
-      const { data, error } = await signUp.email({
+      const response = await authService.register({
         name,
         email,
         password,
@@ -142,41 +141,15 @@ export default function RegisterPage() {
         role,
       });
 
-      if (error) {
-        toast.error(error.message || "Failed to create account");
-        return;
+      if (response.success && response.data?.token) {
+        // Store JWT token
+        localStorage.setItem("token", response.data.token);
+
+        toast.success("Account created successfully!");
+        router.push(getDashboardRoute(role));
+      } else {
+        toast.error(response.message || "Failed to create account");
       }
-
-      // Then, get JWT token from backend API for authenticated requests
-      try {
-        const backendResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"}/auth/login`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-            credentials: "include",
-          },
-        );
-
-        if (backendResponse.ok) {
-          const backendData = await backendResponse.json();
-          if (backendData.success && backendData.data?.token) {
-            // Store JWT token for backend API requests
-            localStorage.setItem("token", backendData.data.token);
-          }
-        } else {
-          console.warn(
-            "Backend login failed, but frontend session is established",
-          );
-        }
-      } catch (backendError) {
-        console.error("Backend token fetch failed:", backendError);
-        // Continue anyway - frontend session is established
-      }
-
-      toast.success("Account created successfully!");
-      router.push(getDashboardRoute(role));
     } catch (err) {
       toast.error(getErrorMessage(err, "Failed to create account"));
     } finally {

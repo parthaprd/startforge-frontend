@@ -1,44 +1,70 @@
 "use client";
 
-import { createContext, useContext, useEffect } from "react";
-import { useSession } from "@/lib/auth-client";
-import { signOut } from "@/lib/auth-client";
+import { createContext, useContext, useEffect, useState } from "react";
+import { authService } from "@/services/authService";
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const { data: session, error, isPending, refetch } = useSession();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (session?.user) {
-      // Session is automatically managed by better-auth
-    }
-  }, [session]);
+    checkAuth();
+  }, []);
 
-  const user = session?.user || null;
-  const loading = isPending;
+  const checkAuth = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      const response = await authService.getMe();
+      if (response.success && response.data) {
+        setUser(response.data);
+      } else {
+        localStorage.removeItem("token");
+        setUser(null);
+      }
+    } catch (error) {
+      console.error("Auth check failed:", error);
+      localStorage.removeItem("token");
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogout = async () => {
     try {
-      // Clear JWT token first
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("token");
-      }
-      // Then sign out from better-auth
-      await signOut();
+      await authService.logout();
     } catch (error) {
       console.error("Logout error:", error);
+    } finally {
+      localStorage.removeItem("token");
+      setUser(null);
+      window.location.href = "/login";
     }
   };
 
   const updateUser = (updatedUser) => {
-    // For optimistic updates - better-auth handles session updates
-    // This is for local UI state updates only
+    setUser(updatedUser);
   };
 
   const refreshUser = async () => {
-    const result = await refetch();
-    return result?.data?.user || null;
+    try {
+      const response = await authService.getMe();
+      if (response.success && response.data) {
+        setUser(response.data);
+        return response.data;
+      }
+      return null;
+    } catch (error) {
+      console.error("Refresh user failed:", error);
+      return null;
+    }
   };
 
   const value = {
@@ -48,7 +74,7 @@ export function AuthProvider({ children }) {
     logout: handleLogout,
     updateUser,
     refreshUser,
-    checkAuth: refetch,
+    checkAuth,
     isAuthenticated: !!user,
   };
 
