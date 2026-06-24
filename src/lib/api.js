@@ -10,9 +10,17 @@ const api = axios.create({
   },
 });
 
-// No Authorization header needed - Better Auth uses cookies
+// Add Authorization header if token exists (fallback for cross-origin)
 api.interceptors.request.use(
-  (config) => config,
+  (config) => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('auth-token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
+    return config;
+  },
   (error) => Promise.reject(error)
 );
 
@@ -23,6 +31,7 @@ api.interceptors.response.use(
       // Only redirect if not already on auth pages
       const isAuthPage = window.location.pathname === '/login' || window.location.pathname === '/register';
       if (!isAuthPage) {
+        localStorage.removeItem('auth-token');
         window.location.href = '/login';
       }
     }
