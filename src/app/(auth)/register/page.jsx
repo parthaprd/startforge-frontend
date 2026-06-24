@@ -18,6 +18,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { authService } from "@/services/authService";
+import { useAuth } from "@/context/AuthContext";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { cn, getErrorMessage } from "@/lib/utils";
@@ -28,6 +29,7 @@ const IMGBB_KEY = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { setUser } = useAuth();
   const [submitting, setSubmitting] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
@@ -143,6 +145,11 @@ export default function RegisterPage() {
 
       if (response.success || response.user) {
         // Better Auth sets session cookie automatically
+        const user = response.user || response.data?.user;
+
+        // Manually set user in context to avoid redirect loop
+        setUser(user);
+
         toast.success("Account created successfully!");
         router.push(getDashboardRoute(role));
       } else {

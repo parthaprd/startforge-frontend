@@ -17,13 +17,19 @@ export function AuthProvider({ children }) {
     try {
       // Better Auth uses session cookies - no token needed
       const response = await authService.getSession();
-      if (response.session && response.user) {
+      console.log("[AuthContext] getSession response:", response);
+
+      // Handle different response formats from Better Auth
+      if (response && response.user) {
         setUser(response.user);
+      } else if (response && response.session && response.session.user) {
+        setUser(response.session.user);
       } else {
+        console.log("[AuthContext] No valid user found in response");
         setUser(null);
       }
     } catch (error) {
-      console.error("Auth check failed:", error);
+      console.error("[AuthContext] Auth check failed:", error);
       setUser(null);
     } finally {
       setLoading(false);
@@ -68,6 +74,7 @@ export function AuthProvider({ children }) {
     refreshUser,
     checkAuth,
     isAuthenticated: !!user,
+    setUser, // Export setUser so login page can manually set user
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

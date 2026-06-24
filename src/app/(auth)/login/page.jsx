@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { Mail, Lock, LogIn } from "lucide-react";
 import { authService } from "@/services/authService";
+import { useAuth } from "@/context/AuthContext";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { getDashboardRoute } from "@/constants/routes";
@@ -13,6 +14,7 @@ import { getDashboardRoute } from "@/constants/routes";
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { setUser } = useAuth();
   const [submitting, setSubmitting] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,10 +24,15 @@ export default function LoginPage() {
     setSubmitting(true);
     try {
       const response = await authService.login({ email, password });
+      console.log("[Login] Response:", response);
 
       if (response.success || response.user) {
         // Better Auth sets session cookie automatically
         const user = response.user || response.data?.user;
+
+        // Manually set user in context to avoid redirect loop
+        setUser(user);
+
         toast.success(`Welcome back, ${user?.name?.split(" ")[0] || "back"}!`);
 
         const redirect = searchParams.get("redirect");
@@ -36,6 +43,7 @@ export default function LoginPage() {
         toast.error(response.message || "Invalid email or password");
       }
     } catch (err) {
+      console.error("[Login] Error:", err);
       toast.error(err.message || "Invalid email or password");
     } finally {
       setSubmitting(false);
