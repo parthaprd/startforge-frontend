@@ -12,8 +12,13 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    // Better-auth handles authentication via session cookies automatically
-    // No need to manually add Authorization headers
+    // For cross-domain backend API, we need JWT token
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
     return config;
   },
   (error) => Promise.reject(error)
@@ -23,9 +28,9 @@ api.interceptors.response.use(
   (response) => response.data,
   (error) => {
     if (typeof window !== 'undefined' && error.response?.status === 401) {
-      // Session expired or invalid - better-auth will handle session cleanup
-      // Clear any stale localStorage auth state
+      // Clear token and redirect to login
       localStorage.removeItem('token');
+      window.location.href = '/login';
     }
     return Promise.reject(
       error.response?.data || {

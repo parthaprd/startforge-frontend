@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useEffect } from 'react';
-import { useSession } from '@/lib/auth-client';
-import { signOut } from '@/lib/auth-client';
+import { createContext, useContext, useEffect } from "react";
+import { useSession } from "@/lib/auth-client";
+import { signOut } from "@/lib/auth-client";
 
 const AuthContext = createContext(null);
 
@@ -20,9 +20,14 @@ export function AuthProvider({ children }) {
 
   const handleLogout = async () => {
     try {
+      // Clear JWT token first
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("token");
+      }
+      // Then sign out from better-auth
       await signOut();
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     }
   };
 
@@ -53,7 +58,7 @@ export function AuthProvider({ children }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }
