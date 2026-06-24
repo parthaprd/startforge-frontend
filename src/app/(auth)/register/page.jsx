@@ -4,37 +4,31 @@ import { useState, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import toast from 'react-hot-toast';
 import { Mail, Lock, User, UserPlus, Rocket, Users, Upload, ImageIcon, X, Loader2 } from 'lucide-react';
-import { registerSchema } from '@/validations/authSchema';
-import { authService } from '@/services/authService';
-import { setToken } from '@/lib/auth';
-import { useAuth } from '@/context/AuthContext';
-import { getDashboardRoute } from '@/constants/routes';
+import { signUp } from '@/lib/auth-client';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import { cn, getErrorMessage } from '@/lib/utils';
+import { getDashboardRoute } from '@/constants/routes';
 
 const IMGBB_API = 'https://api.imgbb.com/1/upload';
 const IMGBB_KEY = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { updateUser } = useAuth();
   const [submitting, setSubmitting] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState('');
   const fileInputRef = useRef(null);
 
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({
-    resolver: yupResolver(registerSchema),
-    defaultValues: { name: '', email: '', image: '', password: '', confirmPassword: '', role: 'collaborator' },
-  });
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [image, setImage] = useState('');
+  const [role, setRole] = useState('collaborator');
 
-  const password = watch('password') || '';
-  const imageUrl = watch('image') || '';
   const strength = useMemo(() => {
     let s = 0;
     if (password.length >= 6) s++;
@@ -78,7 +72,7 @@ export default function RegisterPage() {
 
       if (data.success) {
         const uploadedUrl = data.data.display_url;
-        setValue('image', uploadedUrl);
+        setImage(uploadedUrl);
         setImagePreview(uploadedUrl);
         toast.success('Image uploaded successfully!');
       } else {
@@ -93,7 +87,7 @@ export default function RegisterPage() {
 
   const handleImageUrlChange = (e) => {
     const url = e.target.value;
-    setValue('image', url);
+    setImage(url);
     if (url) {
       setImagePreview(url);
     } else {
@@ -102,23 +96,41 @@ export default function RegisterPage() {
   };
 
   const removeImage = () => {
-    setValue('image', '');
+    setImage('');
     setImagePreview('');
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
 
-  const onSubmit = async (data) => {
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
+    if (password.length < 6) {
+      toast.error('Password must be at least 6 characters');
+      return;
+    }
+
     setSubmitting(true);
     try {
-      const payload = { name: data.name, email: data.email, password: data.password, role: data.role, image: data.image || '' };
-      const res = await authService.register(payload);
-      const { token, user: userData } = res.data;
-      setToken(token);
-      updateUser(userData);
+      const { data, error } = await signUp.email({
+        name,
+        email,
+        password,
+        image: image || '',
+        role,
+      });
+
+      if (error) {
+        toast.error(error.message || 'Failed to create account');
+        return;
+      }
+
       toast.success('Account created successfully!');
-      router.push(getDashboardRoute(userData.role));
+      router.push(getDashboardRoute(role));
     } catch (err) {
       toast.error(getErrorMessage(err, 'Failed to create account'));
     } finally {
@@ -131,10 +143,34 @@ export default function RegisterPage() {
       <h1 className="text-3xl font-bold text-ink dark:text-gray-100">Create your account</h1>
       <p className="mt-2 text-mute dark:text-gray-400">Join StartupForge and start building</p>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-5">
-        <Input label="Full Name" placeholder="John Doe" leftIcon={User} error={errors.name?.message} {...register('name')} />
-        <Input label="Email" type="email" placeholder="you@example.com" leftIcon={Mail} error={errors.email?.message} {...register('email')} />
-        <Input label="Password" type="password" placeholder="••••••••" leftIcon={Lock} hint="Min 6 chars, 1 uppercase, 1 lowercase, 1 number" error={errors.password?.message} {...register('password')} />
+      <form onSubmit={handleRegister} className="mt-8 space-y-5">
+        <Input
+          label="Full Name"
+          placeholder="John Doe"
+          leftIcon={User}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <Input
+          label="Email"
+          type="email"
+          placeholder="you@example.com"
+          leftIcon={Mail}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <Input
+          label="Password"
+          type="password"
+          placeholder="••••••••"
+          leftIcon={Lock}
+          hint="Min 6 chars, 1 uppercase, 1 lowercase, 1 number"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
         {password && (
           <div>
@@ -147,7 +183,15 @@ export default function RegisterPage() {
           </div>
         )}
 
-        <Input label="Confirm Password" type="password" placeholder="••••••••" leftIcon={Lock} error={errors.confirmPassword?.message} {...register('confirmPassword')} />
+        <Input
+          label="Confirm Password"
+          type="password"
+          placeholder="••••••••"
+          leftIcon={Lock}
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+        />
 
         <div>
           <label className="mb-2 block text-sm font-medium text-ink-soft dark:text-gray-300">Profile Image</label>
@@ -216,7 +260,7 @@ export default function RegisterPage() {
             <input
               type="url"
               placeholder="Paste image URL here..."
-              value={imageUrl}
+              value={image}
               onChange={handleImageUrlChange}
               className="w-full rounded-md border border-hairline dark:border-gray-600 bg-surface-soft dark:bg-gray-700 px-3 py-2 text-sm text-ink dark:text-gray-200 placeholder-ash dark:placeholder-gray-500 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
             />
@@ -230,9 +274,15 @@ export default function RegisterPage() {
           <label className="mb-2 block text-sm font-medium text-ink-soft dark:text-gray-300">I want to join as <span className="text-primary">*</span></label>
           <div className="grid grid-cols-2 gap-3">
             {([{ value: 'founder', label: 'Founder', icon: Rocket, desc: 'I have a startup' }, { value: 'collaborator', label: 'Collaborator', icon: Users, desc: 'I want to join' }]).map((opt) => (
-              <label key={opt.value} className={cn('flex cursor-pointer items-center gap-3 rounded-xl border p-4 transition-colors', watch('role') === opt.value ? 'border-primary bg-primary-50 dark:bg-primary-950/30' : 'border-hairline hover:border-ash dark:border-gray-700 dark:hover:border-gray-500')}>
-                <input type="radio" value={opt.value} className="h-4 w-4 border-gray-300 text-primary focus:ring-primary/20 accent-[#e60023]" {...register('role')} />
-                <opt.icon className={cn('h-5 w-5', watch('role') === opt.value ? 'text-primary' : 'text-ash dark:text-gray-500')} />
+              <label key={opt.value} className={cn('flex cursor-pointer items-center gap-3 rounded-xl border p-4 transition-colors', role === opt.value ? 'border-primary bg-primary-50 dark:bg-primary-950/30' : 'border-hairline hover:border-ash dark:border-gray-700 dark:hover:border-gray-500')}>
+                <input
+                  type="radio"
+                  value={opt.value}
+                  checked={role === opt.value}
+                  onChange={() => setRole(opt.value)}
+                  className="h-4 w-4 border-gray-300 text-primary focus:ring-primary/20 accent-[#e60023]"
+                />
+                <opt.icon className={cn('h-5 w-5', role === opt.value ? 'text-primary' : 'text-ash dark:text-gray-500')} />
                 <div>
                   <p className="text-sm font-semibold text-ink dark:text-gray-100">{opt.label}</p>
                   <p className="text-xs text-mute dark:text-gray-400">{opt.desc}</p>
@@ -240,7 +290,6 @@ export default function RegisterPage() {
               </label>
             ))}
           </div>
-          {errors.role && <p className="mt-1 text-xs text-danger-600">{errors.role.message}</p>}
         </div>
 
         <Button type="submit" fullWidth size="lg" loading={submitting} leftIcon={UserPlus} className="rounded-full">Create Account</Button>

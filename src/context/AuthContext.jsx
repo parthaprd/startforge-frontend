@@ -1,103 +1,49 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { authService } from '@/services/authService';
-import { getToken, setToken, removeToken } from '@/lib/auth';
+import { createContext, useContext, useEffect } from 'react';
+import { useSession } from '@/lib/auth-client';
+import { signOut } from '@/lib/auth-client';
 
 const AuthContext = createContext(null);
 
-function extractUser(response) {
-  if (!response) return null;
-
-  const body = response.data && typeof response.data === 'object' ? response.data : response;
-
-  return (
-    body?.data?.user ||
-    body?.data?.data?.user ||
-    body?.user ||
-    body?.data?.user ||
-    null
-  );
-}
-
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  const checkAuth = useCallback(async () => {
-    const token = getToken();
-    if (!token) {
-      setLoading(false);
-      setUser(null);
-      return;
-    }
-
-    try {
-      const response = await authService.getMe();
-      const userData = extractUser(response);
-      if (userData) {
-        setUser(userData);
-      } else {
-
-        setUser(null);
-        removeToken();
-      }
-    } catch (error) {
-      setUser(null);
-      removeToken();
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const { data: session, error, isPending, refetch } = useSession();
 
   useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
-
-  const login = useCallback(async (credentials) => {
-    const response = await authService.login(credentials);
-    const body = response.data && typeof response.data === 'object' ? response.data : response;
-    const token = body?.token || body?.data?.token;
-    const userData = extractUser(response);
-    if (token) setToken(token);
-    setUser(userData);
-    return userData;
-  }, []);
-
-  const logout = useCallback(async () => {
-    try {
-      await authService.logout();
-    } catch (error) {
-
-    } finally {
-      setUser(null);
-      removeToken();
+    if (session?.user) {
+      // Session is automatically managed by better-auth
     }
-  }, []);
+  }, [session]);
 
-  const updateUser = useCallback((updatedUser) => {
-    setUser((prev) => (typeof updatedUser === 'function' ? updatedUser(prev) : updatedUser));
-  }, []);
+  const user = session?.user || null;
+  const loading = isPending;
 
-  const refreshUser = useCallback(async () => {
+  const handleLogout = async () => {
     try {
-      const response = await authService.getMe();
-      const userData = extractUser(response);
-      if (userData) setUser(userData);
-      return userData;
+      await signOut();
     } catch (error) {
-      return null;
+      console.error('Logout error:', error);
     }
-  }, []);
+  };
+
+  const updateUser = (updatedUser) => {
+    // For optimistic updates - better-auth handles session updates
+    // This is for local UI state updates only
+  };
+
+  const refreshUser = async () => {
+    const result = await refetch();
+    return result?.data?.user || null;
+  };
 
   const value = {
     user,
     loading,
-    login,
-    logout,
+    login: null,
+    logout: handleLogout,
     updateUser,
     refreshUser,
-    checkAuth,
+    checkAuth: refetch,
     isAuthenticated: !!user,
   };
 
