@@ -4,23 +4,15 @@ const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 const api = axios.create({
   baseURL,
-  withCredentials: true,
+  withCredentials: true, // CRITICAL: Send cookies with cross-origin requests
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
+// No Authorization header needed - Better Auth uses cookies
 api.interceptors.request.use(
-  (config) => {
-    // For cross-domain backend API, we need JWT token
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    }
-    return config;
-  },
+  (config) => config,
   (error) => Promise.reject(error)
 );
 
@@ -28,10 +20,9 @@ api.interceptors.response.use(
   (response) => response.data,
   (error) => {
     if (typeof window !== 'undefined' && error.response?.status === 401) {
-      // Only clear token and redirect if not already on auth pages
+      // Only redirect if not already on auth pages
       const isAuthPage = window.location.pathname === '/login' || window.location.pathname === '/register';
       if (!isAuthPage) {
-        localStorage.removeItem('token');
         window.location.href = '/login';
       }
     }

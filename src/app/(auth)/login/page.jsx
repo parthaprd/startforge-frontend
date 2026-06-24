@@ -23,18 +23,14 @@ export default function LoginPage() {
     try {
       const response = await authService.login({ email, password });
 
-      if (response.success && response.data?.token) {
-        // Store JWT token
-        localStorage.setItem("token", response.data.token);
-
-        toast.success(
-          `Welcome back, ${response.data.user?.name?.split(" ")[0] || "back"}!`,
-        );
+      if (response.success || response.user) {
+        // Better Auth sets session cookie automatically
+        const user = response.user || response.data?.user;
+        toast.success(`Welcome back, ${user?.name?.split(" ")[0] || "back"}!`);
 
         const redirect = searchParams.get("redirect");
         router.push(
-          redirect ||
-            getDashboardRoute(response.data.user?.role || "collaborator"),
+          redirect || getDashboardRoute(user?.role || "collaborator"),
         );
       } else {
         toast.error(response.message || "Invalid email or password");

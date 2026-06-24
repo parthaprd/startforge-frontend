@@ -15,22 +15,15 @@ export function AuthProvider({ children }) {
 
   const checkAuth = async () => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setLoading(false);
-        return;
-      }
-
-      const response = await authService.getMe();
-      if (response.success && response.data) {
-        setUser(response.data);
+      // Better Auth uses session cookies - no token needed
+      const response = await authService.getSession();
+      if (response.session && response.user) {
+        setUser(response.user);
       } else {
-        localStorage.removeItem("token");
         setUser(null);
       }
     } catch (error) {
       console.error("Auth check failed:", error);
-      localStorage.removeItem("token");
       setUser(null);
     } finally {
       setLoading(false);
@@ -43,7 +36,6 @@ export function AuthProvider({ children }) {
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
-      localStorage.removeItem("token");
       setUser(null);
       window.location.href = "/login";
     }
@@ -55,10 +47,10 @@ export function AuthProvider({ children }) {
 
   const refreshUser = async () => {
     try {
-      const response = await authService.getMe();
-      if (response.success && response.data) {
-        setUser(response.data);
-        return response.data;
+      const response = await authService.getSession();
+      if (response.session && response.user) {
+        setUser(response.user);
+        return response.user;
       }
       return null;
     } catch (error) {

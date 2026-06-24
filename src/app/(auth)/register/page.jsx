@@ -141,10 +141,8 @@ export default function RegisterPage() {
         role,
       });
 
-      if (response.success && response.data?.token) {
-        // Store JWT token
-        localStorage.setItem("token", response.data.token);
-
+      if (response.success || response.user) {
+        // Better Auth sets session cookie automatically
         toast.success("Account created successfully!");
         router.push(getDashboardRoute(role));
       } else {
