@@ -36,13 +36,20 @@ export default function LoginPage() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
+            credentials: "include",
           },
         );
-        const backendData = await backendResponse.json();
 
-        if (backendData.success && backendData.data?.token) {
-          // Store JWT token for backend API requests
-          localStorage.setItem("token", backendData.data.token);
+        if (backendResponse.ok) {
+          const backendData = await backendResponse.json();
+          if (backendData.success && backendData.data?.token) {
+            // Store JWT token for backend API requests
+            localStorage.setItem("token", backendData.data.token);
+          }
+        } else {
+          console.warn(
+            "Backend login failed, but frontend session is established",
+          );
         }
       } catch (backendError) {
         console.error("Backend token fetch failed:", backendError);
