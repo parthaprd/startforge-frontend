@@ -61,14 +61,16 @@ export default function LoginPage() {
   };
 
   const handleGoogleSignIn = () => {
-    // Use the proxied path so the redirect comes back to same origin.
-    // callbackURL tells Better Auth where to redirect after Google completes.
-    // Better Auth expects: /api/auth/sign-in/social?provider=google
-    // (the provider is a query param, NOT a URL segment)
+    // Send the browser directly to the backend for Google OAuth.
+    // The rewrite proxy only works for JSON API calls, not OAuth redirects
+    // (which involve the browser navigating to Google and back).
+    const backendURL =
+      process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') ||
+      'http://localhost:5000';
     const callbackURL = encodeURIComponent(
       `${window.location.origin}/callback`
     );
-    window.location.href = `/api/auth/sign-in/social?provider=google&callbackURL=${callbackURL}`;
+    window.location.href = `${backendURL}/api/auth/sign-in/social?provider=google&callbackURL=${callbackURL}`;
   };
 
   return (
