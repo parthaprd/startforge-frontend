@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, useCallback, useRef } from "react";
-import { authService } from "@/services/authService";
+import { authService, clearToken } from "@/services/authService";
 
 const AuthContext = createContext(null);
 
@@ -42,9 +42,10 @@ export function AuthProvider({ children }) {
 
   const handleLogout = async () => {
     try {
-      await authService.logout();
+      await authService.logout(); // clears token internally
     } catch (error) {
       console.error("Logout error:", error);
+      clearToken(); // ensure cleared even if logout request fails
     } finally {
       setUser(null);
       window.location.href = "/login";

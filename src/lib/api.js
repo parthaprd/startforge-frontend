@@ -14,10 +14,10 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     if (typeof window !== 'undefined') {
-      // Use the same key as auth.js ('token')
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('ba_session_token');
       if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+        // Send as Cookie header — Better Auth reads the session_token cookie
+        config.headers['Cookie'] = `better-auth.session_token=${token}`;
       }
     }
     return config;
@@ -29,11 +29,9 @@ api.interceptors.response.use(
   (response) => response.data,
   (error) => {
     if (typeof window !== 'undefined' && error.response?.status === 401) {
-      // Only redirect if not already on auth pages
       const isAuthPage = window.location.pathname === '/login' || window.location.pathname === '/register';
       if (!isAuthPage) {
-        localStorage.removeItem('auth-token');
-        // Use router navigation instead of hard redirect to avoid losing state
+        localStorage.removeItem('ba_session_token');
         window.location.href = '/login';
       }
     }
