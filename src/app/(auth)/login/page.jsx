@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { Mail, Lock, LogIn } from "lucide-react";
 import { authService } from "@/services/authService";
 import { useAuth } from "@/context/AuthContext";
+import { signIn } from "@/lib/auth-client";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { getDashboardRoute } from "@/constants/routes";
@@ -60,17 +61,21 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleSignIn = () => {
-    // Send the browser directly to the backend for Google OAuth.
-    // The rewrite proxy only works for JSON API calls, not OAuth redirects
-    // (which involve the browser navigating to Google and back).
-    const backendURL =
-      process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') ||
-      'http://localhost:5000';
-    const callbackURL = encodeURIComponent(
-      `${window.location.origin}/callback`
-    );
-    window.location.href = `${backendURL}/api/auth/sign-in/social?provider=google&callbackURL=${callbackURL}`;
+  const handleGoogleSignIn = async () => {
+    // Better Auth social sign-in requires a POST to /api/auth/sign-in/social
+    // with { provider } in the body — it returns { url } to redirect to Google.
+    // We use the Better Auth React client (authClient.signIn.social) which
+    // handles this automatically and redirects the browser.
+    try {
+      const callbackURL = `${window.location.origin}/callback`;
+      await signIn.social({
+        provider: 'google',
+        callbackURL,
+      });
+    } catch (err) {
+      console.error('[Google SignIn] Error:', err);
+      toast.error('Google sign-in failed. Please try again.');
+    }
   };
 
   return (
