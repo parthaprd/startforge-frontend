@@ -53,25 +53,11 @@ export const authService = {
   },
 
   login: async (data) => {
-    // Step 1: sign in — browser cookie gets set automatically
+    // The backend injects `signedToken` (full signed cookie value) into the
+    // sign-in response so we can store it without a second request.
     const res = await authApi.post('/api/auth/sign-in/email', data);
-    if (res.data?.token || res.data?.user) {
-      // Step 2: immediately fetch the full SIGNED token while the browser
-      // cookie is still fresh (this request goes same-origin + withCredentials)
-      try {
-        const tokenRes = await authApi.get('/api/auth/session-token');
-        const signedToken = tokenRes.data?.token;
-        if (signedToken) {
-          saveToken(signedToken);
-        } else if (res.data?.token) {
-          // Last resort: save unsigned token (works for /api/auth/me etc.)
-          saveToken(res.data.token);
-        }
-      } catch {
-        // Fallback: save unsigned token
-        if (res.data?.token) saveToken(res.data.token);
-      }
-    }
+    const signedToken = res.data?.signedToken || res.data?.token;
+    if (signedToken) saveToken(signedToken);
     return res.data;
   },
 
