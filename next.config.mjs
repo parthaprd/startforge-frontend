@@ -1,4 +1,11 @@
 /** @type {import('next').NextConfig} */
+// Derive the backend origin from NEXT_PUBLIC_API_URL (strip /api suffix).
+// Falls back to localhost for local dev only — always set NEXT_PUBLIC_API_URL
+// in production (Vercel env vars).
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') ||
+  'http://localhost:5000';
+
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -20,6 +27,16 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+  },
+  // Proxy /api/auth/* to the backend so session cookies are same-origin.
+  // This avoids cross-origin cookie issues between localhost:3000 ↔ localhost:5000.
+  async rewrites() {
+    return [
+      {
+        source: '/api/auth/:path*',
+        destination: `${API_URL}/api/auth/:path*`,
+      },
+    ];
   },
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,

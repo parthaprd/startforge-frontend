@@ -14,7 +14,7 @@ import { getDashboardRoute } from "@/constants/routes";
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { setUser } = useAuth();
+  const { setUser, checkAuth } = useAuth();
   const [submitting, setSubmitting] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,11 +26,13 @@ export default function LoginPage() {
       const response = await authService.login({ email, password });
       console.log("[Login] Response:", response);
 
-      if (response.success || response.user) {
-        // Better Auth sets session cookie automatically
-        const user = response.user || response.data?.user;
+      // Better Auth sign-in/email returns { token, user } on success.
+      // The session cookie is set automatically by the backend.
+      if (response && response.token) {
+        const user = response.user;
 
-        // Manually set user in context to avoid redirect loop
+        // Set user in context immediately so the dashboard renders
+        // without waiting for a separate getSession call.
         setUser(user);
 
         toast.success(`Welcome back, ${user?.name?.split(" ")[0] || "back"}!`);
@@ -39,8 +41,16 @@ export default function LoginPage() {
         router.push(
           redirect || getDashboardRoute(user?.role || "collaborator"),
         );
+      } else if (response && response.user) {
+        // Fallback: some responses may not include token but have user
+        setUser(response.user);
+        toast.success(`Welcome back, ${response.user?.name?.split(" ")[0] || "back"}!`);
+        const redirect = searchParams.get("redirect");
+        router.push(
+          redirect || getDashboardRoute(response.user?.role || "collaborator"),
+        );
       } else {
-        toast.error(response.message || "Invalid email or password");
+        toast.error(response?.message || "Invalid email or password");
       }
     } catch (err) {
       console.error("[Login] Error:", err);
@@ -51,11 +61,14 @@ export default function LoginPage() {
   };
 
   const handleGoogleSignIn = () => {
-    // Redirect to backend's Google OAuth endpoint
-    const backendUrl =
-      process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") ||
-      "http://localhost:5000";
-    window.location.href = `${backendUrl}/api/auth/sign-in/social/google`;
+    // Use the proxied path so the redirect comes back to same origin.
+    // callbackURL tells Better Auth where to redirect after Google completes.
+    // Better Auth expects: /api/auth/sign-in/social?provider=google
+    // (the provider is a query param, NOT a URL segment)
+    const callbackURL = encodeURIComponent(
+      `${window.location.origin}/callback`
+    );
+    window.location.href = `/api/auth/sign-in/social?provider=google&callbackURL=${callbackURL}`;
   };
 
   return (

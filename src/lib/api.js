@@ -32,6 +32,7 @@ api.interceptors.response.use(
       const isAuthPage = window.location.pathname === '/login' || window.location.pathname === '/register';
       if (!isAuthPage) {
         localStorage.removeItem('auth-token');
+        // Use router navigation instead of hard redirect to avoid losing state
         window.location.href = '/login';
       }
     }

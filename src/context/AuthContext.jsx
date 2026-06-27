@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, useRef } from "react";
 import { authService } from "@/services/authService";
 
 const AuthContext = createContext(null);
@@ -8,24 +8,18 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  // Track whether the user has been explicitly set (e.g. right after login)
+  // to prevent the initial getSession from overwriting it.
+  const userJustSet = useRef(false);
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
+  // Attempt to restore the session from the cookie on mount / page navigation.
+  const checkAuth = useCallback(async () => {
     try {
-      // Better Auth uses session cookies - no token needed
       const response = await authService.getSession();
-      console.log("[AuthContext] getSession response:", response);
-
-      // Handle different response formats from Better Auth
+      // Better Auth returns { user, session } on success
       if (response && response.user) {
         setUser(response.user);
-      } else if (response && response.session && response.session.user) {
-        setUser(response.session.user);
       } else {
-        console.log("[AuthContext] No valid user found in response");
         setUser(null);
       }
     } catch (error) {
@@ -34,7 +28,17 @@ export function AuthProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    // If the user was just set from login, skip the getSession call
+    // that would race and potentially clear the user.
+    if (userJustSet.current) {
+      userJustSet.current = false;
+      return;
+    }
+    checkAuth();
+  }, [checkAuth]);
 
   const handleLogout = async () => {
     try {
@@ -51,10 +55,18 @@ export function AuthProvider({ children }) {
     setUser(updatedUser);
   };
 
+  // Called from login page after successful signIn.
+  // Sets the user immediately and prevents the initial getSession race.
+  const setUserWithFlag = (userData) => {
+    setUser(userData);
+    userJustSet.current = true;
+    setLoading(false);
+  };
+
   const refreshUser = async () => {
     try {
       const response = await authService.getSession();
-      if (response.session && response.user) {
+      if (response && response.user) {
         setUser(response.user);
         return response.user;
       }
@@ -74,7 +86,7 @@ export function AuthProvider({ children }) {
     refreshUser,
     checkAuth,
     isAuthenticated: !!user,
-    setUser, // Export setUser so login page can manually set user
+    setUser: setUserWithFlag,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

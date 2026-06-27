@@ -1,21 +1,22 @@
-import api from '@/lib/api';
+import axios from 'axios';
+
+// For auth endpoints, use same-origin (proxied via Next.js rewrite) so that
+// session cookies are always sent on the same domain.  Non-auth endpoints
+// still hit the backend directly.
+const authApi = axios.create({
+  baseURL: '', // same origin — /api/auth/* is rewritten to the backend
+  withCredentials: true,
+  headers: { 'Content-Type': 'application/json' },
+});
+
+// Strip envelope so callers get response.data directly (consistent with `api`)
+authApi.interceptors.response.use((res) => res.data);
 
 export const authService = {
-  // Better Auth endpoints on backend
-  register: (data) => api.post('/auth/sign-up/email', data),
-  login: async (data) => {
-    const response = await api.post('/auth/sign-in/email', data);
-    // If backend returns a token, store it
-    if (response.token) {
-      localStorage.setItem('auth-token', response.token);
-    }
-    return response;
-  },
-  logout: () => {
-    localStorage.removeItem('auth-token');
-    return api.post('/auth/sign-out');
-  },
-  getSession: () => api.get('/auth/get-session'),
-  getMe: () => api.get('/auth/me'), // Custom endpoint
-  updateProfile: (data) => api.put('/auth/update-profile', data),
+  register: (data) => authApi.post('/api/auth/sign-up/email', data),
+  login: (data) => authApi.post('/api/auth/sign-in/email', data),
+  logout: () => authApi.post('/api/auth/sign-out'),
+  getSession: () => authApi.get('/api/auth/get-session'),
+  getMe: () => authApi.get('/api/auth/me'),
+  updateProfile: (data) => authApi.put('/api/auth/update-profile', data),
 };
