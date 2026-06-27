@@ -143,17 +143,12 @@ export default function RegisterPage() {
         role,
       });
 
-      if (response.success || response.user) {
-        // Better Auth sets session cookie automatically
-        const user = response.user || response.data?.user;
-
-        // Manually set user in context to avoid redirect loop
-        setUser(user);
-
+      if (response?.token && response?.user) {
+        setUser(response.user);
         toast.success("Account created successfully!");
         router.push(getDashboardRoute(role));
       } else {
-        toast.error(response.message || "Failed to create account");
+        toast.error(response?.message || "Failed to create account");
       }
     } catch (err) {
       toast.error(getErrorMessage(err, "Failed to create account"));

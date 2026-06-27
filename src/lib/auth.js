@@ -1,22 +1,7 @@
-
-
-export const TOKEN_KEY = 'token';
-
-export const getToken = () => {
-  if (typeof window === 'undefined') return null;
-  return localStorage.getItem(TOKEN_KEY);
-};
-
-export const setToken = (token) => {
-  if (typeof window === 'undefined') return;
-  localStorage.setItem(TOKEN_KEY, token);
-};
-
-export const removeToken = () => {
-  if (typeof window === 'undefined') return;
-  localStorage.removeItem(TOKEN_KEY);
-};
+// Token helpers — re-exported from authService for backwards compatibility
+export { getToken, saveToken, clearToken } from '@/services/authService';
 
 export const isAuthenticated = () => {
-  return !!getToken();
+  if (typeof window === 'undefined') return false;
+  return !!localStorage.getItem('sf_token');
 };
