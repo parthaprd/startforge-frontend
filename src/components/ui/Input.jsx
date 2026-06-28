@@ -65,8 +65,23 @@ const Input = forwardRef(function Input(
         />
 
         {RightIcon && (
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-            <RightIcon className="h-4 w-4 text-ash" />
+          <div
+            className="absolute inset-y-0 right-0 flex items-center pr-3"
+            onClick={props.onRightIconClick}
+          >
+            {props.onRightIconClick ? (
+              <button
+                type="button"
+                tabIndex={-1}
+                aria-label={props.rightIconLabel || 'Toggle'}
+                className="text-ash hover:text-ink focus:outline-none"
+                onClick={props.onRightIconClick}
+              >
+                <RightIcon className="h-4 w-4" />
+              </button>
+            ) : (
+              <RightIcon className="h-4 w-4 text-ash" />
+            )}
           </div>
         )}
       </div>

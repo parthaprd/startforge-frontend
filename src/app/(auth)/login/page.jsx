@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
-import { Mail, Lock, LogIn } from "lucide-react";
+import { Mail, Lock, LogIn, Eye, EyeOff } from "lucide-react";
 import { authService } from "@/services/authService";
 import { useAuth } from "@/context/AuthContext";
 import Input from "@/components/ui/Input";
@@ -18,6 +18,7 @@ export default function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleEmailSignIn = async (e) => {
     e.preventDefault();
@@ -60,9 +61,12 @@ export default function LoginPage() {
         />
         <Input
           label="Password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="••••••••"
           leftIcon={Lock}
+          rightIcon={showPassword ? EyeOff : Eye}
+          onRightIconClick={() => setShowPassword((v) => !v)}
+          rightIconLabel={showPassword ? "Hide password" : "Show password"}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
